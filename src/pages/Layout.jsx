@@ -1,5 +1,3 @@
-
-
 import React, { useState, useEffect } from "react";
 import { Link, useLocation, useNavigate } from "react-router-dom";
 import { createPageUrl } from "@/utils";
@@ -7,8 +5,8 @@ import { User as UserIcon, ChefHat, History, BarChart3, Settings, LogIn, LogOut,
 import { User } from "@/api/entities"; // User entity
 import { Button } from "@/components/ui/button";
 import { motion, AnimatePresence } from "framer-motion";
-import PWAInstallPrompt from "./components/pwa/PWAInstallPrompt";
-import PWAUpdateNotification from "./components/pwa/PWAUpdateNotification";
+import PWAInstallPrompt from "@/components/pwa/PWAInstallPrompt";
+import PWAUpdateNotification from "@/components/pwa/PWAUpdateNotification";
 
 const navigationItems = [
   {
@@ -442,4 +440,3 @@ export default function Layout({ children, currentPageName }) {
     </>
   );
 }
-
