@@ -79,7 +79,7 @@ export default function AuthDialog({ open, onOpenChange }) {
       // ログイン成功
       toast({
         title: "ログインしました",
-        description: "ようこそ、NutriAIへ",
+        description: "ようこそ、SIXPROへ",
       });
       
       onOpenChange(false);
@@ -147,7 +147,7 @@ export default function AuthDialog({ open, onOpenChange }) {
       <DialogContent className="sm:max-w-[425px]">
         <DialogHeader>
           <DialogTitle className="text-xl text-center mb-2">
-            {showResetForm ? 'パスワードをリセット' : 'NutriAIにログイン'}
+            {showResetForm ? 'パスワードをリセット' : 'SIXPROにログイン'}
           </DialogTitle>
         </DialogHeader>
         

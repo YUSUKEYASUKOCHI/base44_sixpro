@@ -80,7 +80,7 @@ export default function PaymentRequired({ onPaymentComplete }) {
             <CreditCard className="w-10 h-10 text-white" />
           </div>
           <CardTitle className="text-3xl font-bold text-gray-900 mb-4">
-            NutriAI プレミアムプラン
+            SIXPRO プレミアムプラン
           </CardTitle>
           <p className="text-gray-600 text-lg">
             AIによるパーソナライズされた栄養管理を始めましょう

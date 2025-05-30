@@ -103,7 +103,7 @@ export default function Layout({ children, currentPageName }) {
 
     const appleTitleMeta = document.createElement('meta');
     appleTitleMeta.name = 'apple-mobile-web-app-title';
-    appleTitleMeta.content = 'NutriAI';
+    appleTitleMeta.content = 'SIXPRO';
     document.head.appendChild(appleTitleMeta);
 
     // Apple Touch Icon
@@ -221,11 +221,11 @@ export default function Layout({ children, currentPageName }) {
                 <div className="w-8 h-8 bg-white rounded-lg flex items-center justify-center shadow-sm border">
                   <img 
                     src="https://qtrypzzcjebvfcihiynt.supabase.co/storage/v1/object/public/base44-prod/public/ee265bd28_95.png" 
-                    alt="NutriAI Logo" 
+                    alt="SIXPRO Logo" 
                     className="w-5 h-5 object-contain"
                   />
                 </div>
-                <h1 className="text-lg font-bold text-gray-900">NutriAI</h1>
+                <h1 className="text-lg font-bold text-gray-900">SIXPRO</h1>
               </div>
             </div>
             {isAuthLoading ? null : !currentUser && (
@@ -263,12 +263,12 @@ export default function Layout({ children, currentPageName }) {
                     <div className="w-12 h-12 bg-white rounded-2xl flex items-center justify-center shadow-lg border">
                       <img 
                         src="https://qtrypzzcjebvfcihiynt.supabase.co/storage/v1/object/public/base44-prod/public/ee265bd28_95.png" 
-                        alt="NutriAI Logo" 
+                        alt="SIXPRO Logo" 
                         className="w-8 h-8 object-contain"
                       />
                     </div>
                     <div>
-                      <h2 className="font-bold text-gray-900 text-xl">NutriAI</h2>
+                      <h2 className="font-bold text-gray-900 text-xl">SIXPRO</h2>
                       <p className="text-xs text-gray-500 font-medium">パーソナル栄養管理</p>
                     </div>
                   </div>
@@ -341,12 +341,12 @@ export default function Layout({ children, currentPageName }) {
                 <div className="w-12 h-12 bg-white rounded-2xl flex items-center justify-center shadow-lg border">
                   <img 
                     src="https://qtrypzzcjebvfcihiynt.supabase.co/storage/v1/object/public/base44-prod/public/ee265bd28_95.png" 
-                    alt="NutriAI Logo" 
+                    alt="SIXPRO Logo" 
                     className="w-8 h-8 object-contain"
                   />
                 </div>
                 <div>
-                  <h2 className="font-bold text-gray-900 text-xl">NutriAI</h2>
+                  <h2 className="font-bold text-gray-900 text-xl">SIXPRO</h2>
                   <p className="text-xs text-gray-500 font-medium">パーソナル栄養管理</p>
                 </div>
               </div>

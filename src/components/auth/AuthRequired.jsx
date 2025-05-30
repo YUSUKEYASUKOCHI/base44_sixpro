@@ -30,7 +30,7 @@ export default function AuthRequired({ children }) {
     // 初回チェック
     checkUser();
     
-    // 認証状態の変更を監視（トースト通知なし）
+    // 認証状態の変更を監視（トースト通知は表示しない）
     const { data: { subscription } } = supabase.auth.onAuthStateChange(
       async (event, session) => {
         if (event === 'SIGNED_IN' && session?.user) {
@@ -70,10 +70,10 @@ export default function AuthRequired({ children }) {
       >
         <img 
           src="https://qtrypzzcjebvfcihiynt.supabase.co/storage/v1/object/public/base44-prod/public/ee265bd28_95.png" 
-          alt="NutriAI ロゴ" 
+          alt="SIXPRO ロゴ" 
           className="w-20 h-20 object-contain mb-8"
         />
-        <h2 className="text-3xl font-bold text-gray-800 mb-4">NutriAIへようこそ</h2>
+        <h2 className="text-3xl font-bold text-gray-800 mb-4">SIXPROへようこそ</h2>
         <p className="text-gray-600 mb-8 max-w-md">
           あなたの健康的な食生活をサポートします。続けるにはログインしてください。
         </p>

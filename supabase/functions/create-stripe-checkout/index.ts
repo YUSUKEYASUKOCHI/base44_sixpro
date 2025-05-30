@@ -41,7 +41,7 @@ serve(async (req) => {
           price_data: {
             currency: 'jpy',
             product_data: {
-              name: 'NutriAI プレミアム',
+              name: 'SIXPRO プレミアム',
               description: 'AIパーソナライズド栄養管理プラン',
               images: ['https://qtrypzzcjebvfcihiynt.supabase.co/storage/v1/object/public/base44-prod/public/ee265bd28_95.png'],
             },

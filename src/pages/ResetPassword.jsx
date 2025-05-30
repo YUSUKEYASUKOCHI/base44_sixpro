@@ -94,7 +94,7 @@ export default function ResetPassword() {
           <div className="w-16 h-16 bg-white rounded-2xl flex items-center justify-center shadow-lg border">
             <img 
               src="https://qtrypzzcjebvfcihiynt.supabase.co/storage/v1/object/public/base44-prod/public/ee265bd28_95.png" 
-              alt="NutriAI Logo" 
+              alt="SIXPRO Logo" 
               className="w-10 h-10 object-contain"
             />
           </div>
