@@ -6,6 +6,8 @@ import MenuGeneration from "./MenuGeneration";
 
 import MenuHistory from "./MenuHistory";
 
+import ProgressTracking from "./ProgressTracking";
+
 import ResetPassword from "./ResetPassword";
 
 import { BrowserRouter as Router, Route, Routes, useLocation } from 'react-router-dom';
@@ -17,6 +19,8 @@ const PAGES = {
     MenuGeneration: MenuGeneration,
     
     MenuHistory: MenuHistory,
+    
+    ProgressTracking: ProgressTracking,
     
     ResetPassword: ResetPassword,
     
@@ -61,6 +65,8 @@ function PagesContent() {
                 <Route path="/MenuGeneration" element={<MenuGeneration />} />
                 
                 <Route path="/MenuHistory" element={<MenuHistory />} />
+                
+                <Route path="/ProgressTracking" element={<ProgressTracking />} />
                 
                 <Route path="/reset-password" element={<ResetPassword />} />
                 
