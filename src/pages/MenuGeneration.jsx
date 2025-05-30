@@ -4,11 +4,13 @@ import Auth from "@/api/auth";
 import { motion, AnimatePresence } from "framer-motion";
 import { Loader2, AlertTriangle, Sparkles } from "lucide-react";
 import { Alert, AlertDescription } from "@/components/ui/alert";
+import { Button } from "@/components/ui/button";
 import { Link } from "react-router-dom";
 import { createPageUrl } from "@/utils";
 import AuthRequired from "../components/auth/AuthRequired";
 import MenuGenerationForm from "../components/menu/MenuGenerationForm";
 import GeneratedMenuDisplay from "../components/menu/GeneratedMenuDisplay";
+import MenuGenerationModal from "../components/menu/MenuGenerationModal";
 
 export default function MenuGeneration() {
   const [profile, setProfile] = useState(null);
@@ -18,6 +20,7 @@ export default function MenuGeneration() {
   const [shoppingList, setShoppingList] = useState(null);
   const [currentUserForPage, setCurrentUserForPage] = useState(null);
   const [profileLoading, setProfileLoading] = useState(true);
+  const [isGenerationModalOpen, setIsGenerationModalOpen] = useState(false);
 
   useEffect(() => {
     const fetchCurrentUserAndProfile = async () => {
@@ -174,174 +177,213 @@ export default function MenuGeneration() {
               </Link>
             </motion.div>
           ) : (
-            <div className="grid grid-cols-1 lg:grid-cols-2 gap-4 md:gap-8">
-              <div>
-                <MenuGenerationForm 
-                  onGenerate={generateMenu} 
-                  isGenerating={isGenerating}
-                />
-                
-                {isGenerating && (
-                  <motion.div
-                    initial={{ opacity: 0, y: 20 }}
-                    animate={{ opacity: 1, y: 0 }}
-                    className="mt-4 md:mt-6"
-                  >
-                    <div className="glass-effect rounded-xl p-6 md:p-8 text-center relative overflow-hidden mx-2 md:mx-0">
-                      {/* 背景のキラキラアニメーション */}
-                      <div className="absolute inset-0 pointer-events-none">
-                        {[...Array(15)].map((_, i) => ( // モバイルでは少し減らす
-                          <motion.div
-                            key={i}
-                            initial={{ opacity: 0, scale: 0, x: Math.random() * 100, y: Math.random() * 100 }}
-                            animate={{ 
-                              opacity: [0, 1, 0], 
-                              scale: [0, 1, 0],
-                              x: Math.random() * 250, // モバイル用に調整
-                              y: Math.random() * 150
-                            }}
-                            transition={{ 
-                              duration: 2 + Math.random() * 2,
-                              repeat: Infinity,
-                              delay: Math.random() * 2
-                            }}
-                            className="absolute w-1.5 h-1.5 md:w-2 md:h-2 bg-gradient-to-r from-yellow-400 to-orange-500 rounded-full"
-                            style={{
-                              boxShadow: '0 0 8px rgba(255, 215, 0, 0.8)'
-                            }}
-                          />
-                        ))}
-                      </div>
-
-                      {/* メインアニメーション */}
-                      <motion.div
-                        animate={{ 
-                          rotateY: [0, 360],
-                          scale: [1, 1.1, 1]
-                        }}
-                        transition={{ 
-                          rotateY: { duration: 3, repeat: Infinity, ease: "linear" },
-                          scale: { duration: 2, repeat: Infinity, ease: "easeInOut" }
-                        }}
-                        className="relative w-16 h-16 md:w-20 md:h-20 mx-auto mb-4 md:mb-6"
-                      >
-                        <div className="absolute inset-0 bg-gradient-to-r from-purple-500 via-pink-500 to-orange-500 rounded-full opacity-20 blur-lg"></div>
-                        <motion.div
-                          animate={{ rotate: 360 }}
-                          transition={{ duration: 2, repeat: Infinity, ease: "linear" }}
-                          className="relative w-full h-full bg-gradient-to-r from-indigo-500 via-purple-500 to-pink-500 rounded-full flex items-center justify-center"
-                        >
-                          <Sparkles className="w-8 h-8 md:w-10 md:h-10 text-white" />
-                        </motion.div>
-                      </motion.div>
-
-                      {/* タイトル */}
-                      <motion.h3
-                        initial={{ opacity: 0, y: 20 }}
-                        animate={{ opacity: 1, y: 0 }}
-                        transition={{ delay: 0.3 }}
-                        className="text-lg md:text-2xl font-bold bg-gradient-to-r from-purple-600 to-pink-600 bg-clip-text text-transparent mb-3 md:mb-4"
-                      >
-                        ✨ AIシェフが特別メニューを調理中 ✨
-                      </motion.h3>
-
-                      {/* 動的メッセージ */}
-                      <motion.div className="space-y-2 md:space-y-3">
-                        {[
-                          "🧑‍🍳 あなたの好みを分析中...",
-                          "🥗 栄養バランスを計算中...",
-                          "🌟 美味しい料理を選定中...",
-                          "📝 レシピを準備中..."
-                        ].map((message, index) => (
-                          <motion.p
-                            key={index}
-                            initial={{ opacity: 0, x: -20 }}
-                            animate={{ opacity: [0, 1, 0.7], x: 0 }}
-                            transition={{ 
-                              delay: index * 1.5,
-                              duration: 1.5,
-                              repeat: Infinity,
-                              repeatDelay: 4.5
-                            }}
-                            className="text-gray-700 font-medium text-sm md:text-base"
-                          >
-                            {message}
-                          </motion.p>
-                        ))}
-                      </motion.div>
-
-                      {/* プログレスバー */}
-                      <div className="mt-6 md:mt-8 w-full bg-gray-200 rounded-full h-2.5 md:h-3 overflow-hidden">
-                        <motion.div
-                          initial={{ width: "0%" }}
-                          animate={{ width: "100%" }}
-                          transition={{ duration: 8, ease: "easeInOut" }}
-                          className="h-full bg-gradient-to-r from-green-400 via-blue-500 to-purple-600 rounded-full relative"
-                        >
-                          <motion.div
-                            animate={{ x: ["-100%", "100%"] }}
-                            transition={{ duration: 1.5, repeat: Infinity, ease: "linear" }}
-                            className="absolute inset-0 bg-gradient-to-r from-transparent via-white to-transparent opacity-30"
-                          />
-                        </motion.div>
-                      </div>
-
-                      {/* エンカレッジメント */}
-                      <motion.div
-                        initial={{ opacity: 0 }}
-                        animate={{ opacity: 1 }}
-                        transition={{ delay: 2 }}
-                        className="mt-4 md:mt-6 text-xs md:text-sm text-gray-600"
-                      >
-                        <span className="inline-block animate-pulse">🎯</span>
-                        <span className="ml-2">あと少しで完成です！</span>
-                      </motion.div>
-                    </div>
-                  </motion.div>
-                )}
-              </div>
-
-              <div>
-                <AnimatePresence mode="wait">
-                  {generatedMenu && !isGenerating && (
-                    <motion.div
-                      initial={{ opacity: 0, scale: 0.9, y: 50 }}
-                      animate={{ opacity: 1, scale: 1, y: 0 }}
-                      transition={{ duration: 0.8, ease: "easeOut" }}
+            <div className="text-center">
+              {/* 生成ボタン - クリックでモーダルを開く */}
+              {!generatedMenu && !isGenerating && (
+                <motion.div 
+                  initial={{ opacity: 0, scale: 0.9 }}
+                  animate={{ opacity: 1, scale: 1 }}
+                  className="mb-8 md:mb-12 max-w-xl mx-auto px-4"
+                >
+                  <div className="glass-effect rounded-xl p-6 md:p-8 text-center border border-gray-100 shadow-xl">
+                    <Sparkles className="w-12 h-12 text-primary-main mx-auto mb-6" />
+                    <h2 className="text-xl md:text-2xl font-bold text-gray-900 mb-3">
+                      新しいメニューを生成
+                    </h2>
+                    <p className="text-gray-600 mb-6">
+                      AIがあなたに合わせた栄養バランスの取れたメニューを提案します。いくつかの質問に答えるだけで最適なメニューが作成されます。
+                    </p>
+                    <Button 
+                      onClick={() => setIsGenerationModalOpen(true)}
+                      className="primary-gradient text-white font-medium px-8 py-4 rounded-xl shadow-lg transition-all duration-300 text-base md:text-lg mobile-optimized"
                     >
-                      <GeneratedMenuDisplay
-                        menu={generatedMenu}
-                        onSave={saveMenu}
-                        onGenerateShoppingList={handleGenerateShoppingList}
-                      />
-                    </motion.div>
-                  )}
-                </AnimatePresence>
+                      <Sparkles className="w-5 h-5 mr-2" />
+                      メニュー生成を開始
+                    </Button>
+                  </div>
+                </motion.div>
+              )}
 
-                {shoppingList && (
-                  <motion.div
-                    initial={{ opacity: 0, y: 20 }}
-                    animate={{ opacity: 1, y: 0 }}
-                    className="mt-4 md:mt-6 glass-effect rounded-xl p-4 md:p-6 mx-2 md:mx-0"
-                  >
-                    <h3 className="text-lg md:text-xl font-semibold mb-3 md:mb-4">買い物リスト</h3>
-                    <div className="grid grid-cols-1 gap-2">
-                      {shoppingList.map((ingredient, index) => (
-                        <motion.div 
-                          key={index} 
-                          initial={{ opacity: 0, x: -20 }}
-                          animate={{ opacity: 1, x: 0 }}
-                          transition={{ delay: index * 0.1 }}
-                          className="flex items-center gap-2 p-3 bg-gray-50 rounded-lg border border-gray-200"
-                        >
-                          <span className="text-primary-main">✓</span>
-                          <span className="text-gray-800 text-sm md:text-base">{ingredient}</span>
-                        </motion.div>
+              {/* モーダル */}
+              <MenuGenerationModal 
+                open={isGenerationModalOpen} 
+                onOpenChange={setIsGenerationModalOpen}
+                onGenerate={generateMenu}
+                isGenerating={isGenerating}
+              />
+
+              {/* 生成中表示 */}
+              {isGenerating && (
+                <motion.div
+                  initial={{ opacity: 0, y: 20 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  className="mt-4 md:mt-6"
+                >
+                  <div className="glass-effect rounded-xl p-6 md:p-8 text-center relative overflow-hidden mx-2 md:mx-0">
+                    {/* 背景のキラキラアニメーション */}
+                    <div className="absolute inset-0 pointer-events-none">
+                      {[...Array(15)].map((_, i) => ( // モバイルでは少し減らす
+                        <motion.div
+                          key={i}
+                          initial={{ opacity: 0, scale: 0, x: Math.random() * 100, y: Math.random() * 100 }}
+                          animate={{ 
+                            opacity: [0, 1, 0], 
+                            scale: [0, 1, 0],
+                            x: Math.random() * 250, // モバイル用に調整
+                            y: Math.random() * 150
+                          }}
+                          transition={{ 
+                            duration: 2 + Math.random() * 2,
+                            repeat: Infinity,
+                            delay: Math.random() * 2
+                          }}
+                          className="absolute w-1.5 h-1.5 md:w-2 md:h-2 bg-gradient-to-r from-yellow-400 to-orange-500 rounded-full"
+                          style={{
+                            boxShadow: '0 0 8px rgba(255, 215, 0, 0.8)'
+                          }}
+                        />
                       ))}
                     </div>
+
+                    {/* メインアニメーション */}
+                    <motion.div
+                      animate={{ 
+                        rotateY: [0, 360],
+                        scale: [1, 1.1, 1]
+                      }}
+                      transition={{ 
+                        rotateY: { duration: 3, repeat: Infinity, ease: "linear" },
+                        scale: { duration: 2, repeat: Infinity, ease: "easeInOut" }
+                      }}
+                      className="relative w-16 h-16 md:w-20 md:h-20 mx-auto mb-4 md:mb-6"
+                    >
+                      <div className="absolute inset-0 bg-gradient-to-r from-purple-500 via-pink-500 to-orange-500 rounded-full opacity-20 blur-lg"></div>
+                      <motion.div
+                        animate={{ rotate: 360 }}
+                        transition={{ duration: 2, repeat: Infinity, ease: "linear" }}
+                        className="relative w-full h-full bg-gradient-to-r from-indigo-500 via-purple-500 to-pink-500 rounded-full flex items-center justify-center"
+                      >
+                        <Sparkles className="w-8 h-8 md:w-10 md:h-10 text-white" />
+                      </motion.div>
+                    </motion.div>
+
+                    {/* タイトル */}
+                    <motion.h3
+                      initial={{ opacity: 0, y: 20 }}
+                      animate={{ opacity: 1, y: 0 }}
+                      transition={{ delay: 0.3 }}
+                      className="text-lg md:text-2xl font-bold bg-gradient-to-r from-purple-600 to-pink-600 bg-clip-text text-transparent mb-3 md:mb-4"
+                    >
+                      ✨ AIシェフが特別メニューを調理中 ✨
+                    </motion.h3>
+
+                    {/* 動的メッセージ */}
+                    <motion.div className="space-y-2 md:space-y-3">
+                      {[
+                        "🧑‍🍳 あなたの好みを分析中...",
+                        "🥗 栄養バランスを計算中...",
+                        "🌟 美味しい料理を選定中...",
+                        "📝 レシピを準備中..."
+                      ].map((message, index) => (
+                        <motion.p
+                          key={index}
+                          initial={{ opacity: 0, x: -20 }}
+                          animate={{ opacity: [0, 1, 0.7], x: 0 }}
+                          transition={{ 
+                            delay: index * 1.5,
+                            duration: 1.5,
+                            repeat: Infinity,
+                            repeatDelay: 4.5
+                          }}
+                          className="text-gray-700 font-medium text-sm md:text-base"
+                        >
+                          {message}
+                        </motion.p>
+                      ))}
+                    </motion.div>
+
+                    {/* プログレスバー */}
+                    <div className="mt-6 md:mt-8 w-full bg-gray-200 rounded-full h-2.5 md:h-3 overflow-hidden">
+                      <motion.div
+                        initial={{ width: "0%" }}
+                        animate={{ width: "100%" }}
+                        transition={{ duration: 8, ease: "easeInOut" }}
+                        className="h-full bg-gradient-to-r from-green-400 via-blue-500 to-purple-600 rounded-full relative"
+                      >
+                        <motion.div
+                          animate={{ x: ["-100%", "100%"] }}
+                          transition={{ duration: 1.5, repeat: Infinity, ease: "linear" }}
+                          className="absolute inset-0 bg-gradient-to-r from-transparent via-white to-transparent opacity-30"
+                        />
+                      </motion.div>
+                    </div>
+
+                    {/* エンカレッジメント */}
+                    <motion.div
+                      initial={{ opacity: 0 }}
+                      animate={{ opacity: 1 }}
+                      transition={{ delay: 2 }}
+                      className="mt-4 md:mt-6 text-xs md:text-sm text-gray-600"
+                    >
+                      <span className="inline-block animate-pulse">🎯</span>
+                      <span className="ml-2">あと少しで完成です！</span>
+                    </motion.div>
+                  </div>
+                </motion.div>
+              )}
+
+              {/* 生成されたメニュー表示 */}
+              <AnimatePresence mode="wait">
+                {generatedMenu && !isGenerating && (
+                  <motion.div
+                    initial={{ opacity: 0, scale: 0.9, y: 50 }}
+                    animate={{ opacity: 1, scale: 1, y: 0 }}
+                    transition={{ duration: 0.8, ease: "easeOut" }}
+                  >
+                    {!isGenerationModalOpen && (
+                      <div className="mb-6">
+                        <Button 
+                          onClick={() => setIsGenerationModalOpen(true)}
+                          variant="outline"
+                          className="border-primary-main text-primary-main hover:bg-primary-main/10"
+                        >
+                          <Sparkles className="w-4 h-4 mr-2" />
+                          別のメニューを生成
+                        </Button>
+                      </div>
+                    )}
+                    <GeneratedMenuDisplay
+                      menu={generatedMenu}
+                      onSave={saveMenu}
+                      onGenerateShoppingList={handleGenerateShoppingList}
+                    />
                   </motion.div>
                 )}
-              </div>
+              </AnimatePresence>
+
+              {shoppingList && (
+                <motion.div
+                  initial={{ opacity: 0, y: 20 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  className="mt-4 md:mt-6 glass-effect rounded-xl p-4 md:p-6 mx-2 md:mx-0"
+                >
+                  <h3 className="text-lg md:text-xl font-semibold mb-3 md:mb-4">買い物リスト</h3>
+                  <div className="grid grid-cols-1 gap-2">
+                    {shoppingList.map((ingredient, index) => (
+                      <motion.div 
+                        key={index} 
+                        initial={{ opacity: 0, x: -20 }}
+                        animate={{ opacity: 1, x: 0 }}
+                        transition={{ delay: index * 0.1 }}
+                        className="flex items-center gap-2 p-3 bg-gray-50 rounded-lg border border-gray-200"
+                      >
+                        <span className="text-primary-main">✓</span>
+                        <span className="text-gray-800 text-sm md:text-base">{ingredient}</span>
+                      </motion.div>
+                    ))}
+                  </div>
+                </motion.div>
+              )}
             </div>
           )}
         </div>
