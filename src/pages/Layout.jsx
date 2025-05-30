@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import { Link, useLocation, useNavigate } from "react-router-dom";
 import { createPageUrl } from "@/utils";
 import { User as UserIcon, ChefHat, History, BarChart3, Settings, LogIn, LogOut, Loader2, Menu, X } from "lucide-react"; // User from lucide-react is UserIcon
-import { User } from "@/api/entities"; // User entity
+import { User } from "@/api/mock"; // User entity
 import { Button } from "@/components/ui/button";
 import { motion, AnimatePresence } from "framer-motion";
 import PWAInstallPrompt from "@/components/pwa/PWAInstallPrompt";

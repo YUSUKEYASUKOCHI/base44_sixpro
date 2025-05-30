@@ -1,6 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { GeneratedMenu } from "@/api/entities";
-import { User } from "@/api/entities";
+import { GeneratedMenu, User } from "@/api/mock";
 import { motion, AnimatePresence } from "framer-motion";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";

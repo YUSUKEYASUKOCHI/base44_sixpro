@@ -1,6 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { UserProfile } from "@/api/entities";
-import { User } from "@/api/entities";
+import { UserProfile, User } from "@/api/mock";
 import { motion } from "framer-motion";
 import { Loader2, CheckCircle } from "lucide-react";
 import ProfileForm from "../components/profile/ProfileForm";

@@ -1,9 +1,5 @@
-
 import React, { useState, useEffect } from "react";
-import { UserProfile } from "@/api/entities";
-import { GeneratedMenu } from "@/api/entities";
-import { User } from "@/api/entities";
-import { InvokeLLM } from "@/api/integrations";
+import { UserProfile, GeneratedMenu, User, InvokeLLM } from "@/api/mock";
 import { motion, AnimatePresence } from "framer-motion";
 import { Loader2, AlertTriangle, Sparkles } from "lucide-react";
 import { Alert, AlertDescription } from "@/components/ui/alert";
@@ -83,61 +79,19 @@ export default function MenuGeneration() {
     try {
       const dailyCalories = calculateBasalMetabolicRate(profile) + parseInt(formData.calorie_adjustment);
       
-      const prompt = `
-あなたは栄養士のエキスパートです。以下のユーザー情報に基づいて、パーソナライズされた栄養メニューを生成してください。
-
-【ユーザー情報】
-- 年齢: ${profile.age}歳
-- 性別: ${profile.gender}
-- 身長: ${profile.height}cm
-- 体重: ${profile.weight}kg
-- 活動レベル: ${profile.activity_level}
-- 目標: ${profile.goal}
-- アレルギー: ${profile.allergies?.join(', ') || 'なし'}
-- 食事制限: ${profile.dietary_restrictions?.join(', ') || 'なし'}
-- 好みの料理: ${profile.preferred_cuisine?.join(', ') || '特になし'}
-- 苦手な食材: ${profile.disliked_foods?.join(', ') || 'なし'}
-
-【メニュー要件】
-- 対象日: ${formData.target_date}
-- 食事回数: ${formData.meal_count}食
-- 目標カロリー: ${dailyCalories}kcal
-- 特別なリクエスト: ${formData.special_requests || 'なし'}
-
-日本人の食文化に合わせた栄養バランスの良いメニューを提案してください。
-各料理には詳細な材料と簡単な作り方も含めてください。
-アレルギーや食事制限は必ず守ってください。
-生成するJSONのトップレベルのプロパティには、"title", "total_calories", "total_protein", "total_carbs", "total_fat", "meals" を必ず含めてください。
-"meals" 配列の各要素（食事オブジェクト）には "meal_type" と "dishes" 配列を必ず含めてください。
-"dishes" 配列の各要素（料理オブジェクト）には "name", "calories", "protein", "carbs", "fat", "ingredients", "recipe" を必ず含めてください。
-`;
-
-      const result = await InvokeLLM({
-        prompt: prompt,
-        response_json_schema: GeneratedMenu.schema().properties // Use schema from entity for structure
-      });
+      // モックデータを使用
+      const result = await InvokeLLM();
       
-      // Ensure all required fields are present, providing defaults if necessary from LLM response
+      // モックデータと合わせてメニューデータを生成
       const menuData = {
         title: result.title || `${formData.target_date}の特別メニュー`,
         total_calories: result.total_calories || 0,
         total_protein: result.total_protein || 0,
         total_carbs: result.total_carbs || 0,
         total_fat: result.total_fat || 0,
-        meals: result.meals?.map(meal => ({
-          meal_type: meal.meal_type || "snack",
-          dishes: meal.dishes?.map(dish => ({
-            name: dish.name || "不明な料理",
-            calories: dish.calories || 0,
-            protein: dish.protein || 0,
-            carbs: dish.carbs || 0,
-            fat: dish.fat || 0,
-            ingredients: dish.ingredients || [],
-            recipe: dish.recipe || "レシピ情報なし"
-          })) || []
-        })) || [],
+        meals: result.meals || [],
         target_date: formData.target_date,
-        created_by: currentUserForPage.email, // Ensure created_by is set
+        created_by: currentUserForPage.email,
       };
       setGeneratedMenu(menuData);
 

@@ -1,10 +1,9 @@
-
 import React, { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { CreditCard, Shield, Check, Loader2, AlertTriangle } from "lucide-react";
 import { motion } from "framer-motion";
-import { createStripeCheckout } from "@/api/functions";
+import { createStripeCheckout } from "@/api/mock";
 
 export default function PaymentRequired({ onPaymentComplete }) {
   const [isProcessing, setIsProcessing] = useState(false);

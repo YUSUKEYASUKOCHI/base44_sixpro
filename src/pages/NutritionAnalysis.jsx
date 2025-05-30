@@ -1,6 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { GeneratedMenu } from "@/api/entities";
-import { User } from "@/api/entities";
+import { GeneratedMenu, User } from "@/api/mock";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { motion } from "framer-motion";
 import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, PieChart, Pie, Cell, LineChart, Line, ResponsiveContainer } from 'recharts';
