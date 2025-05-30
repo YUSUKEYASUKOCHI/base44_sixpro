@@ -3,7 +3,6 @@ import { useNavigate } from 'react-router-dom';
 import { Loader2 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { motion } from 'framer-motion';
-import { useToast } from '@/components/ui/use-toast';
 import supabase from '@/lib/supabase';
 import AuthDialog from './AuthDialog';
 
@@ -12,7 +11,6 @@ export default function AuthRequired({ children }) {
   const [isLoading, setIsLoading] = useState(true);
   const [authDialogOpen, setAuthDialogOpen] = useState(false);
   const navigate = useNavigate();
-  const { toast } = useToast();
 
   useEffect(() => {
     const checkUser = async () => {
@@ -32,21 +30,13 @@ export default function AuthRequired({ children }) {
     // 初回チェック
     checkUser();
     
-    // 認証状態の変更を監視
+    // 認証状態の変更を監視（トースト通知なし）
     const { data: { subscription } } = supabase.auth.onAuthStateChange(
       async (event, session) => {
         if (event === 'SIGNED_IN' && session?.user) {
           setCurrentUser(session.user);
-          toast({
-            title: "ログインしました",
-            description: "ようこそ、" + (session.user.email || "ユーザー") + "さん",
-          });
         } else if (event === 'SIGNED_OUT') {
           setCurrentUser(null);
-          toast({
-            title: "ログアウトしました",
-            description: "ご利用ありがとうございました",
-          });
           navigate('/');
         }
       }
@@ -56,7 +46,7 @@ export default function AuthRequired({ children }) {
     return () => {
       subscription.unsubscribe();
     };
-  }, [navigate, toast]);
+  }, [navigate]);
 
   const handleOpenAuthDialog = () => {
     setAuthDialogOpen(true);

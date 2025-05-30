@@ -3,7 +3,6 @@ import { Dialog, DialogContent, DialogHeader, DialogTitle } from '@/components/u
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
-import { Label } from '@/components/ui/label';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { z } from 'zod';
@@ -11,6 +10,7 @@ import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from '
 import { Alert, AlertDescription } from '@/components/ui/alert';
 import { Loader2, AlertTriangle } from 'lucide-react';
 import supabase from '@/lib/supabase';
+import { useToast } from '@/components/ui/use-toast';
 
 const loginSchema = z.object({
   email: z.string().email({ message: '有効なメールアドレスを入力してください' }),
@@ -37,6 +37,7 @@ export default function AuthDialog({ open, onOpenChange }) {
   const [error, setError] = useState('');
   const [showResetForm, setShowResetForm] = useState(false);
   const [resetSuccess, setResetSuccess] = useState(false);
+  const { toast } = useToast();
 
   const loginForm = useForm({
     resolver: zodResolver(loginSchema),
@@ -76,6 +77,11 @@ export default function AuthDialog({ open, onOpenChange }) {
       if (error) throw error;
       
       // ログイン成功
+      toast({
+        title: "ログインしました",
+        description: "ようこそ、NutriAIへ",
+      });
+      
       onOpenChange(false);
     } catch (error) {
       setError(error.message || 'ログインに失敗しました');
@@ -102,6 +108,11 @@ export default function AuthDialog({ open, onOpenChange }) {
       if (error) throw error;
       
       // 登録成功（確認メールが送信される）
+      toast({
+        title: "アカウント登録完了",
+        description: "確認メールを送信しました。メールを確認してアカウントを有効化してください。",
+      });
+      
       setError('');
       onOpenChange(false);
     } catch (error) {

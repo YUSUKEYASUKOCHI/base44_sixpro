@@ -7,7 +7,6 @@ import { motion, AnimatePresence } from "framer-motion";
 import PWAInstallPrompt from "@/components/pwa/PWAInstallPrompt";
 import PWAUpdateNotification from "@/components/pwa/PWAUpdateNotification";
 import supabase from "@/lib/supabase";
-import { useToast } from "@/components/ui/use-toast";
 import AuthDialog from "@/components/auth/AuthDialog";
 
 const navigationItems = [
@@ -44,7 +43,6 @@ export default function Layout({ children, currentPageName }) {
   const [isAuthLoading, setIsAuthLoading] = useState(true);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const [authDialogOpen, setAuthDialogOpen] = useState(false);
-  const { toast } = useToast();
 
   useEffect(() => {
     const fetchUser = async () => {
@@ -61,21 +59,13 @@ export default function Layout({ children, currentPageName }) {
     };
     fetchUser();
 
-    // 認証状態の変更を監視
+    // 認証状態の変更を監視 - トースト通知なし
     const { data: { subscription } } = supabase.auth.onAuthStateChange(
       (event, session) => {
         if (event === 'SIGNED_IN' && session?.user) {
           setCurrentUser(session.user);
-          toast({
-            title: "ログインしました",
-            description: "ようこそ、" + (session.user.user_metadata?.full_name || session.user.email) + "さん",
-          });
         } else if (event === 'SIGNED_OUT') {
           setCurrentUser(null);
-          toast({
-            title: "ログアウトしました",
-            description: "ご利用ありがとうございました",
-          });
           navigate('/');
         }
       }
@@ -84,7 +74,7 @@ export default function Layout({ children, currentPageName }) {
     return () => {
       subscription.unsubscribe();
     };
-  }, [location.key, navigate, toast]);
+  }, [location.key, navigate]);
 
   // PWA関連のheadタグを動的に追加
   useEffect(() => {
