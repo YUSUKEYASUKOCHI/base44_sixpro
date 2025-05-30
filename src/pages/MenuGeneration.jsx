@@ -40,28 +40,28 @@ export default function MenuGeneration() {
     fetchCurrentUserAndProfile();
   }, []);
 
+  // PFC計算ロジックを無効化
+  // const calculateBasalMetabolicRate = (userProfile) => {
+  //   if (!userProfile) return 1800; // Default if no profile
+  //   const { age, gender, height, weight, activity_level } = userProfile;
+  //   if (!age || !gender || !height || !weight || !activity_level) return 1800; // Default if essential fields missing
 
-  const calculateBasalMetabolicRate = (userProfile) => {
-    if (!userProfile) return 1800; // Default if no profile
-    const { age, gender, height, weight, activity_level } = userProfile;
-    if (!age || !gender || !height || !weight || !activity_level) return 1800; // Default if essential fields missing
+  //   let bmr;
+  //   if (gender === 'male') {
+  //     bmr = 88.362 + (13.397 * weight) + (4.799 * height) - (5.677 * age);
+  //   } else {
+  //     bmr = 447.593 + (9.247 * weight) + (3.098 * height) - (4.330 * age);
+  //   }
 
-    let bmr;
-    if (gender === 'male') {
-      bmr = 88.362 + (13.397 * weight) + (4.799 * height) - (5.677 * age);
-    } else {
-      bmr = 447.593 + (9.247 * weight) + (3.098 * height) - (4.330 * age);
-    }
-
-    const activityMultipliers = {
-      sedentary: 1.2,
-      light: 1.375,
-      moderate: 1.55,
-      active: 1.725,
-      very_active: 1.9
-    };
-    return Math.round(bmr * activityMultipliers[activity_level]);
-  };
+  //   const activityMultipliers = {
+  //     sedentary: 1.2,
+  //     light: 1.375,
+  //     moderate: 1.55,
+  //     active: 1.725,
+  //     very_active: 1.9
+  //   };
+  //   return Math.round(bmr * activityMultipliers[activity_level]);
+  // };
 
   const generateMenu = async (formData) => {
     if (!currentUserForPage) {
@@ -78,7 +78,8 @@ export default function MenuGeneration() {
     setShoppingList(null);
 
     try {
-      const dailyCalories = calculateBasalMetabolicRate(profile) + parseInt(formData.calorie_adjustment);
+      // PFC計算を無効化し、固定値または結果から直接取得する方式に変更
+      // const dailyCalories = calculateBasalMetabolicRate(profile) + parseInt(formData.calorie_adjustment);
       
       // モックデータを使用
       const result = await InvokeLLM();

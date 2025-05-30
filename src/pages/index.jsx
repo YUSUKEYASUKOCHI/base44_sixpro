@@ -6,8 +6,6 @@ import MenuGeneration from "./MenuGeneration";
 
 import MenuHistory from "./MenuHistory";
 
-import NutritionAnalysis from "./NutritionAnalysis";
-
 import ResetPassword from "./ResetPassword";
 
 import { BrowserRouter as Router, Route, Routes, useLocation } from 'react-router-dom';
@@ -19,8 +17,6 @@ const PAGES = {
     MenuGeneration: MenuGeneration,
     
     MenuHistory: MenuHistory,
-    
-    NutritionAnalysis: NutritionAnalysis,
     
     ResetPassword: ResetPassword,
     
@@ -65,8 +61,6 @@ function PagesContent() {
                 <Route path="/MenuGeneration" element={<MenuGeneration />} />
                 
                 <Route path="/MenuHistory" element={<MenuHistory />} />
-                
-                <Route path="/NutritionAnalysis" element={<NutritionAnalysis />} />
                 
                 <Route path="/reset-password" element={<ResetPassword />} />
                 

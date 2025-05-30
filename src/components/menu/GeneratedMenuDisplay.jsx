@@ -55,11 +55,12 @@ export default function GeneratedMenuDisplay({ menu, onSave, onGenerateShoppingL
           <p className="opacity-90 text-sm md:text-base">対象日: {new Date(menu.target_date).toLocaleDateString('ja-JP')}</p>
         </div>
         <CardContent className="p-4 md:p-6">
-          <div className="grid grid-cols-2 md:grid-cols-4 gap-3 md:gap-4">
+          <div className="grid grid-cols-1 md:grid-cols-1 gap-3 md:gap-4">
             <div className="text-center p-3 md:p-0">
               <div className="text-xl md:text-2xl font-bold" style={{ color: '#183041' }}>{menu.total_calories}</div>
               <div className="text-xs md:text-sm text-gray-600">総カロリー</div>
             </div>
+            {/* PFC表示を非表示にする
             <div className="text-center p-3 md:p-0">
               <div className="text-xl md:text-2xl font-bold text-blue-600">{menu.total_protein}g</div>
               <div className="text-xs md:text-sm text-gray-600">タンパク質</div>
@@ -72,6 +73,7 @@ export default function GeneratedMenuDisplay({ menu, onSave, onGenerateShoppingL
               <div className="text-xl md:text-2xl font-bold text-red-600">{menu.total_fat}g</div>
               <div className="text-xs md:text-sm text-gray-600">脂質</div>
             </div>
+            */}
           </div>
         </CardContent>
       </Card>
@@ -128,9 +130,11 @@ export default function GeneratedMenuDisplay({ menu, onSave, onGenerateShoppingL
                                   <h4 className="font-semibold text-base md:text-lg">{dish.name}</h4>
                                   <div className="flex flex-wrap gap-2 md:gap-4 mt-2 text-xs md:text-sm text-gray-600">
                                     <span>🔥 {dish.calories}kcal</span>
+                                    {/* PFC表示を非表示にする
                                     <span>🥩 {dish.protein}g</span>
                                     <span>🍞 {dish.carbs}g</span>
                                     <span>🧈 {dish.fat}g</span>
+                                    */}
                                   </div>
                                 </div>
                                 <div className="flex items-center gap-2 ml-2">

@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { Link, useLocation, useNavigate } from "react-router-dom";
 import { createPageUrl } from "@/utils";
-import { User as UserIcon, ChefHat, History, BarChart3, Settings, LogIn, LogOut, Loader2, Menu, X } from "lucide-react";
+import { User as UserIcon, ChefHat, History, Settings, LogIn, LogOut, Loader2, Menu, X } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { motion, AnimatePresence } from "framer-motion";
 import PWAInstallPrompt from "@/components/pwa/PWAInstallPrompt";
@@ -20,12 +20,6 @@ const navigationItems = [
     title: "履歴・管理",
     url: createPageUrl("MenuHistory"),
     icon: History,
-    requiresAuth: true,
-  },
-  {
-    title: "栄養分析",
-    url: createPageUrl("NutritionAnalysis"),
-    icon: BarChart3,
     requiresAuth: true,
   },
   {

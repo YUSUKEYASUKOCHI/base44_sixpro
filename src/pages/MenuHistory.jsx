@@ -6,7 +6,7 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { Heart, Calendar, BarChart3, ChefHat, Loader2 } from "lucide-react";
+import { Heart, Calendar, ChefHat, Loader2 } from "lucide-react";
 import { format } from "date-fns";
 import AuthRequired from "../components/auth/AuthRequired";
 
@@ -43,9 +43,6 @@ export default function MenuHistory() {
 
   const totalMenus = menus.length;
   const favoriteMenus = menus.filter(menu => menu.is_favorite).length;
-  const averageCalories = menus.length > 0 
-    ? Math.round(menus.reduce((sum, menu) => sum + (menu.total_calories || 0), 0) / menus.length)
-    : 0;
 
   const toggleFavorite = async (menuToUpdate) => {
     if (!currentUserForPage) return;
@@ -90,7 +87,7 @@ export default function MenuHistory() {
           ) : (
             <>
               {/* 統計カード */}
-              <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8">
                 <Card className="glass-effect border-0 shadow-lg">
                   <CardHeader className="pb-2">
                     <div className="flex items-center justify-between">
@@ -117,6 +114,7 @@ export default function MenuHistory() {
                   </CardContent>
                 </Card>
 
+                {/* 平均カロリーのカードを削除
                 <Card className="glass-effect border-0 shadow-lg">
                   <CardHeader className="pb-2">
                     <div className="flex items-center justify-between">
@@ -129,6 +127,7 @@ export default function MenuHistory() {
                     <p className="text-sm text-gray-600 mt-1">kcal</p>
                   </CardContent>
                 </Card>
+                */}
               </div>
 
               {/* メニューリスト */}
@@ -192,11 +191,9 @@ export default function MenuHistory() {
                                 </div>
                               </CardHeader>
                               <CardContent className="pt-0 flex-grow">
-                                <div className="grid grid-cols-2 gap-3 text-sm">
-                                  <div className="flex justify-between"><span className="text-gray-500">ｶﾛﾘｰ</span><span className="font-medium text-gray-700">{menu.total_calories}kcal</span></div>
-                                  <div className="flex justify-between"><span className="text-gray-500">ﾀﾝﾊﾟｸ質</span><span className="font-medium text-gray-700">{menu.total_protein}g</span></div>
-                                  <div className="flex justify-between"><span className="text-gray-500">炭水化物</span><span className="font-medium text-gray-700">{menu.total_carbs}g</span></div>
-                                  <div className="flex justify-between"><span className="text-gray-500">脂質</span><span className="font-medium text-gray-700">{menu.total_fat}g</span></div>
+                                <div className="flex justify-between text-sm">
+                                  <span className="text-gray-500">カロリー</span>
+                                  <span className="font-medium text-gray-700">{menu.total_calories}kcal</span>
                                 </div>
                                 <div className="mt-4">
                                   <Badge variant="secondary" className="bg-primary-main/10 text-primary-dark">
@@ -250,18 +247,9 @@ export default function MenuHistory() {
                       </Button>
                     </div>
 
-                    <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-6">
-                      {[
-                        { label: "総カロリー", value: selectedMenu.total_calories, unit: "kcal", color: "text-green-600" },
-                        { label: "タンパク質", value: selectedMenu.total_protein, unit: "g", color: "text-blue-600" },
-                        { label: "炭水化物", value: selectedMenu.total_carbs, unit: "g", color: "text-orange-600" },
-                        { label: "脂質", value: selectedMenu.total_fat, unit: "g", color: "text-red-600" },
-                      ].map(item => (
-                        <div key={item.label} className="text-center p-4 bg-gray-50 rounded-lg border border-gray-100">
-                          <div className={`text-xl font-bold ${item.color}`}>{item.value}{item.unit}</div>
-                          <div className="text-sm text-gray-500 mt-1">{item.label}</div>
-                        </div>
-                      ))}
+                    <div className="text-center p-4 bg-gray-50 rounded-lg border border-gray-100 mb-6">
+                      <div className="text-xl font-bold text-green-600">{selectedMenu.total_calories} kcal</div>
+                      <div className="text-sm text-gray-500 mt-1">総カロリー</div>
                     </div>
 
                     <div className="space-y-4">
@@ -282,9 +270,6 @@ export default function MenuHistory() {
                                   <h4 className="font-medium text-gray-800">{dish.name}</h4>
                                   <div className="flex flex-wrap gap-x-4 gap-y-1 mt-1 text-sm text-gray-600">
                                     <span>🔥 {dish.calories}kcal</span>
-                                    <span>🥩 {dish.protein}g</span>
-                                    <span>🍞 {dish.carbs}g</span>
-                                    <span>🧈 {dish.fat}g</span>
                                   </div>
                                   {dish.ingredients && dish.ingredients.length > 0 && (
                                     <div className="mt-2">
