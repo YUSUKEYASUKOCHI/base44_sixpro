@@ -59,7 +59,7 @@ export default function Layout({ children, currentPageName }) {
     };
     fetchUser();
 
-    // 認証状態の変更を監視 - トースト通知なし
+    // 認証状態の変更を監視（トースト通知は表示しない）
     const { data: { subscription } } = supabase.auth.onAuthStateChange(
       (event, session) => {
         if (event === 'SIGNED_IN' && session?.user) {
