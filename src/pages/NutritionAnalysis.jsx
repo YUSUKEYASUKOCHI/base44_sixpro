@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
-import { GeneratedMenu, User } from "@/api/mock";
+import { GeneratedMenu } from "@/api/mock";
+import Auth from "@/api/auth";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { motion } from "framer-motion";
 import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, PieChart, Pie, Cell, LineChart, Line, ResponsiveContainer } from 'recharts';
@@ -19,7 +20,7 @@ export default function NutritionAnalysis() {
     const fetchCurrentUserAndMenus = async () => {
       setIsLoading(true);
       try {
-        const user = await User.me();
+        const user = await Auth.getCurrentUser();
         setCurrentUserForPage(user);
         const data = await GeneratedMenu.filter({ created_by: user.email }, "-target_date");
         setMenus(data);

@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
-import { UserProfile, User } from "@/api/mock";
+import { UserProfile } from "@/api/mock";
+import Auth from "@/api/auth";
 import { motion } from "framer-motion";
 import { Loader2, CheckCircle } from "lucide-react";
 import ProfileForm from "../components/profile/ProfileForm";
@@ -18,7 +19,7 @@ export default function ProfileSettings() {
   useEffect(() => {
     const fetchCurrentUser = async () => {
       try {
-        const user = await User.me();
+        const user = await Auth.getCurrentUser();
         setCurrentUserForPage(user);
       } catch (error) {
         // AuthRequired component will handle this

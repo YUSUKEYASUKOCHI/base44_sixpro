@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
-import { GeneratedMenu, User } from "@/api/mock";
+import { GeneratedMenu } from "@/api/mock";
+import Auth from "@/api/auth";
 import { motion, AnimatePresence } from "framer-motion";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
@@ -20,7 +21,7 @@ export default function MenuHistory() {
     const fetchCurrentUserAndMenus = async () => {
       setIsLoading(true);
       try {
-        const user = await User.me();
+        const user = await Auth.getCurrentUser();
         setCurrentUserForPage(user);
         const data = await GeneratedMenu.filter({ created_by: user.email }, "-created_date");
         setMenus(data);

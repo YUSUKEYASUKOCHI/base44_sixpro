@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
-import { UserProfile, GeneratedMenu, User, InvokeLLM } from "@/api/mock";
+import { UserProfile, GeneratedMenu, InvokeLLM } from "@/api/mock";
+import Auth from "@/api/auth";
 import { motion, AnimatePresence } from "framer-motion";
 import { Loader2, AlertTriangle, Sparkles } from "lucide-react";
 import { Alert, AlertDescription } from "@/components/ui/alert";
@@ -22,7 +23,7 @@ export default function MenuGeneration() {
     const fetchCurrentUserAndProfile = async () => {
       setProfileLoading(true);
       try {
-        const user = await User.me();
+        const user = await Auth.getCurrentUser();
         setCurrentUserForPage(user);
         const profiles = await UserProfile.filter({ created_by: user.email });
         if (profiles.length > 0) {
