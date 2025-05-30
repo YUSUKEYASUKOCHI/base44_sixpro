@@ -1,12 +1,14 @@
 import React, { useState, useEffect } from "react";
 import { Link, useLocation, useNavigate } from "react-router-dom";
 import { createPageUrl } from "@/utils";
-import { User as UserIcon, ChefHat, History, BarChart3, Settings, LogIn, LogOut, Loader2, Menu, X } from "lucide-react"; // User from lucide-react is UserIcon
-import { User } from "@/api/mock"; // User entity
+import { User as UserIcon, ChefHat, History, BarChart3, Settings, LogIn, LogOut, Loader2, Menu, X } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { motion, AnimatePresence } from "framer-motion";
 import PWAInstallPrompt from "@/components/pwa/PWAInstallPrompt";
 import PWAUpdateNotification from "@/components/pwa/PWAUpdateNotification";
+import supabase from "@/lib/supabase";
+import { useToast } from "@/components/ui/use-toast";
+import AuthDialog from "@/components/auth/AuthDialog";
 
 const navigationItems = [
   {
@@ -41,12 +43,15 @@ export default function Layout({ children, currentPageName }) {
   const [currentUser, setCurrentUser] = useState(null);
   const [isAuthLoading, setIsAuthLoading] = useState(true);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+  const [authDialogOpen, setAuthDialogOpen] = useState(false);
+  const { toast } = useToast();
 
   useEffect(() => {
     const fetchUser = async () => {
       setIsAuthLoading(true);
       try {
-        const user = await User.me();
+        const { data: { user }, error } = await supabase.auth.getUser();
+        if (error) throw error;
         setCurrentUser(user);
       } catch (error) {
         setCurrentUser(null);
@@ -55,7 +60,31 @@ export default function Layout({ children, currentPageName }) {
       setIsAuthLoading(false);
     };
     fetchUser();
-  }, [location.key]);
+
+    // 認証状態の変更を監視
+    const { data: { subscription } } = supabase.auth.onAuthStateChange(
+      (event, session) => {
+        if (event === 'SIGNED_IN' && session?.user) {
+          setCurrentUser(session.user);
+          toast({
+            title: "ログインしました",
+            description: "ようこそ、" + (session.user.user_metadata?.full_name || session.user.email) + "さん",
+          });
+        } else if (event === 'SIGNED_OUT') {
+          setCurrentUser(null);
+          toast({
+            title: "ログアウトしました",
+            description: "ご利用ありがとうございました",
+          });
+          navigate('/');
+        }
+      }
+    );
+    
+    return () => {
+      subscription.unsubscribe();
+    };
+  }, [location.key, navigate, toast]);
 
   // PWA関連のheadタグを動的に追加
   useEffect(() => {
@@ -111,18 +140,13 @@ export default function Layout({ children, currentPageName }) {
     };
   }, []);
 
-  const handleLogin = async () => {
-    try {
-      await User.login();
-    } catch (error) {
-      console.error("Login failed:", error);
-    }
+  const handleLogin = () => {
+    setAuthDialogOpen(true);
   };
 
   const handleLogout = async () => {
     try {
-      await User.logout();
-      setCurrentUser(null);
+      await supabase.auth.signOut();
     } catch (error) {
       console.error("Logout failed:", error);
     }
@@ -185,6 +209,9 @@ export default function Layout({ children, currentPageName }) {
         {/* PWA関連コンポーネント */}
         <PWAInstallPrompt />
         <PWAUpdateNotification />
+
+        {/* 認証ダイアログ */}
+        <AuthDialog open={authDialogOpen} onOpenChange={setAuthDialogOpen} />
 
         {/* モバイル用ヘッダー */}
         <header className="md:hidden bg-white/95 backdrop-blur-sm border-b border-gray-100 px-4 py-3 sticky top-0 z-50 safe-area-inset-top">
@@ -295,7 +322,7 @@ export default function Layout({ children, currentPageName }) {
                         </div>
                         <div className="flex-1 min-w-0">
                           <p className="font-semibold text-gray-900 text-sm truncate" title={currentUser.email}>
-                            {currentUser.full_name || currentUser.email}
+                            {currentUser.user_metadata?.full_name || currentUser.email}
                           </p>
                           <Button
                             variant="ghost"
@@ -401,7 +428,7 @@ export default function Layout({ children, currentPageName }) {
                     </div>
                     <div className="flex-1 min-w-0">
                       <p className="font-semibold text-gray-900 text-sm truncate" title={currentUser.email}>
-                        {currentUser.full_name || currentUser.email}
+                        {currentUser.user_metadata?.full_name || currentUser.email}
                       </p>
                       <Button
                         variant="ghost"

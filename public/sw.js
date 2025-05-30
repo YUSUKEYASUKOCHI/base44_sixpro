@@ -5,7 +5,8 @@ const CACHE_NAME = 'nutriai-v1';
 const ASSETS_TO_CACHE = [
   '/',
   '/index.html',
-  '/manifest.json'
+  '/manifest.json',
+  '/offline.html'
 ];
 
 // インストール時にキャッシュを作成
@@ -44,6 +45,12 @@ self.addEventListener('fetch', (event) => {
               });
 
             return response;
+          })
+          .catch(() => {
+            // オフライン時のフォールバック
+            if (event.request.mode === 'navigate') {
+              return caches.match('/offline.html');
+            }
           });
       })
   );

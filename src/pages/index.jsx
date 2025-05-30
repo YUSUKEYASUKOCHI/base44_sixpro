@@ -8,6 +8,8 @@ import MenuHistory from "./MenuHistory";
 
 import NutritionAnalysis from "./NutritionAnalysis";
 
+import ResetPassword from "./ResetPassword";
+
 import { BrowserRouter as Router, Route, Routes, useLocation } from 'react-router-dom';
 
 const PAGES = {
@@ -19,6 +21,8 @@ const PAGES = {
     MenuHistory: MenuHistory,
     
     NutritionAnalysis: NutritionAnalysis,
+    
+    ResetPassword: ResetPassword,
     
 }
 
@@ -40,6 +44,15 @@ function PagesContent() {
     const location = useLocation();
     const currentPage = _getCurrentPage(location.pathname);
     
+    // リセットパスワードページはレイアウトを使用しない
+    if (location.pathname === '/reset-password') {
+      return (
+        <Routes>
+          <Route path="/reset-password" element={<ResetPassword />} />
+        </Routes>
+      );
+    }
+    
     return (
         <Layout currentPageName={currentPage}>
             <Routes>            
@@ -54,6 +67,8 @@ function PagesContent() {
                 <Route path="/MenuHistory" element={<MenuHistory />} />
                 
                 <Route path="/NutritionAnalysis" element={<NutritionAnalysis />} />
+                
+                <Route path="/reset-password" element={<ResetPassword />} />
                 
             </Routes>
         </Layout>
