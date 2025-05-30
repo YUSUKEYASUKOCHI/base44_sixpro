@@ -9,11 +9,13 @@ import {
 } from "@/components/ui/toast";
 
 export function Toaster() {
+  // トーストの配列を取得するが、表示はしない
   const { toasts, dismiss } = useToast();
 
   return (
     <ToastProvider>
-      {toasts.map(function ({ id, title, description, action, ...props }) {
+      {/* トーストを表示しない（空の配列を使用） */}
+      {[].map(function ({ id, title, description, action, ...props }) {
         return (
           <Toast key={id} {...props}>
             <div className="grid gap-1">
